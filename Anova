@@ -1,0 +1,39 @@
+# Script para realizar uma ANOVA em R
+
+# Gerar um conjunto de dados de exemplo
+# Vamos criar um conjunto de dados hipotético com três grupos
+
+set.seed(123) # Para reprodutibilidade
+grupo1 <- rnorm(20, mean = 5, sd = 1)
+grupo2 <- rnorm(20, mean = 5.5, sd = 1)
+grupo3 <- rnorm(20, mean = 6, sd = 1)
+
+# Combinar os dados em um único dataframe
+dados <- data.frame(
+  valores = c(grupo1, grupo2, grupo3),
+  grupos = factor(rep(c("Grupo 1", "Grupo 2", "Grupo 3"), each = 20))
+)
+
+# Vistualizar os primeiros registros do dataframe
+print(head(dados))
+
+# Realizar a ANOVA
+anova_resultado <- aov(valores ~ grupos, data = dados)
+
+# Resumo dos resultados da ANOVA
+print(summary(anova_resultado))
+
+# Para visualizar graficamente os resultados
+boxplot(valores ~ grupos, data = dados, main = "Boxplot por Grupo",
+        xlab = "Grupos", ylab = "Valores", col = c("lightblue", "lightgreen", "lightcoral"))
+
+# Testes Post-Hoc (opcional)
+# Se a ANOVA indicar diferenças significativas, podemos realizar testes post-hoc
+# para mais detalhes das diferenças
+
+# Aqui usaremos o teste de Tukey
+tukey_resultado <- TukeyHSD(anova_resultado)
+print(tukey_resultado)
+
+# Plotar o resultado do teste de Tukey
+plot(tukey_resultado)
